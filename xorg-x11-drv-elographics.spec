@@ -4,7 +4,7 @@
 
 Summary:   Xorg X11 elographics input driver
 Name:      xorg-x11-drv-elographics
-Version:   1.3.0
+Version:   1.4.1
 Release:   2%{?dist}
 URL:       http://www.x.org
 License:   MIT
@@ -12,9 +12,7 @@ Group:     User Interface/X Hardware Support
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:   ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
-Patch01:   0001-Use-xf86SetStrOption-for-Option-Device.patch
-Patch02:   0002-Don-t-free-on-init-failure-let-UnInit-take-care-of-i.patch
-Patch03:   0003-Test-the-device-in-PreInit-and-fail-if-it-cannot-be-.patch
+Patch01:   0001-Revert-Fix-name-and-type_name-for-elographics.patch
 
 ExcludeArch: s390 s390x
 
@@ -29,8 +27,6 @@ X.Org X11 elographics input driver.
 %prep
 %setup -q -n %{tarball}-%{version}
 %patch01 -p1
-%patch02 -p1
-%patch03 -p1
 
 %build
 %configure --disable-static
@@ -54,6 +50,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man4/elographics.4*
 
 %changelog
+* Wed Aug 22 2012 Peter Hutterer <peter.hutterer@redhat.com> - 1.4.1-2
+- Rebuild for server 1.13
+
+* Mon Aug 20 2012 Peter Hutterer <peter.hutterer@redhat.com> 1.4.1-1
+- elographics 1.4.1 (#835222)
+
 * Tue Jul 19 2011 Peter Hutterer <peter.hutterer@redhat.com> 1.3.0-2
 - Fix crashers if PreInit fails
 
