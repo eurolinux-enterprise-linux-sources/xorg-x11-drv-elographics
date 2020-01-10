@@ -4,28 +4,33 @@
 
 Summary:   Xorg X11 elographics input driver
 Name:      xorg-x11-drv-elographics
-Version:   1.2.3
-Release:   5%{?dist}
+Version:   1.3.0
+Release:   2%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:   ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
-Patch1:    elographics-1.2.3-abi.patch
+Patch01:   0001-Use-xf86SetStrOption-for-Option-Device.patch
+Patch02:   0002-Don-t-free-on-init-failure-let-UnInit-take-care-of-i.patch
+Patch03:   0003-Test-the-device-in-PreInit-and-fail-if-it-cannot-be-.patch
 
 ExcludeArch: s390 s390x
 
-BuildRequires: xorg-x11-server-sdk >= 1.3.0.0-6
+BuildRequires: xorg-x11-server-sdk >= 1.10.0-1
 
-Requires:  xorg-x11-server-Xorg >= 1.3.0.0-6
+Requires:  Xorg %(xserver-sdk-abi-requires ansic)
+Requires:  Xorg %(xserver-sdk-abi-requires xinput)
 
 %description 
 X.Org X11 elographics input driver.
 
 %prep
 %setup -q -n %{tarball}-%{version}
-%patch1 -p1
+%patch01 -p1
+%patch02 -p1
+%patch03 -p1
 
 %build
 %configure --disable-static
@@ -49,6 +54,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man4/elographics.4*
 
 %changelog
+* Tue Jul 19 2011 Peter Hutterer <peter.hutterer@redhat.com> 1.3.0-2
+- Fix crashers if PreInit fails
+
+* Mon Jun 27 2011 Peter Hutterer <peter.hutterer@redhat.com> 1.3.0-1
+- elographics 1.3.0 (#713783)
+
 * Thu Jan 07 2010 Peter Hutterer <peter.hutterer@redhat.com> 1.2.3-5
 - Change define to global as per Packaging Guidelines.
 - Fix indentation of Version and Release.

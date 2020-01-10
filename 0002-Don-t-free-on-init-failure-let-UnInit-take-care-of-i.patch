@@ -1,0 +1,32 @@
+From de753ac30874f1c66bdf66d964959cd47c6b81f9 Mon Sep 17 00:00:00 2001
+From: Peter Hutterer <peter.hutterer@who-t.net>
+Date: Tue, 19 Jul 2011 10:47:45 +1000
+Subject: [PATCH 2/3] Don't free on init failure, let UnInit take care of it.
+
+Avoid double-frees when the server calls Uninit.
+
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+---
+ src/xf86Elo.c |    6 ------
+ 1 files changed, 0 insertions(+), 6 deletions(-)
+
+diff --git a/src/xf86Elo.c b/src/xf86Elo.c
+index cee7557..4e9296e 100644
+--- a/src/xf86Elo.c
++++ b/src/xf86Elo.c
+@@ -944,12 +944,6 @@ xf86EloInit(InputDriverPtr	drv,
+   if (!str) {
+     xf86Msg(X_ERROR, "%s: No Device specified in Elographics module config.\n",
+ 	    pInfo->name);
+-    if (priv) {
+-      if (priv->input_dev) {
+-	free(priv->input_dev);
+-      }
+-      free(priv);
+-    }
+     return BadValue;
+   }
+   priv->input_dev = strdup(str);
+-- 
+1.7.6
+
